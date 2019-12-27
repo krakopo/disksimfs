@@ -132,7 +132,6 @@ static ssize_t
 disksimfs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
 {
 	struct disksimfs_fs_info *fsi = iocb->ki_filp->f_mapping->host->i_sb->s_root->d_sb->s_fs_info;
-	pr_info("Delaying write for %d ms\n", fsi->mount_opts.write_delay);
 	mdelay(fsi->mount_opts.write_delay);
 	return generic_file_write_iter(iocb, from);
 }
@@ -305,7 +304,9 @@ static int __init disksimfs_init(void) {
 		return error;
 	}
 
-	disksimfs_aops.set_page_dirty = (int (*)(struct page *)) kallsyms_lookup_name("__set_page_dirty_no_writeback");
+	disksimfs_aops.set_page_dirty =
+		(int (*)(struct page *))
+			kallsyms_lookup_name("__set_page_dirty_no_writeback");
 
 	return 0;
 }
