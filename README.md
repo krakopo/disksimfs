@@ -18,11 +18,3 @@ is essentially tmpfs with support for additional mount options.
 
 As alluded to above, we will have two mount options to control the read and
 write latency of our ramdisk. Laency values will be in milliseconds.
-
-# Issues
-
-Unable to reuse kernel functions like `shmem_fill_super`, `ramfs_create`,
-`ramfs_mkdir`, etc. since they are not exported symbols. During module compile
-we get undefined symbol warnings. As a result we end up copying a lot of ramfs
-and tmpfs code which we could have reused. The same is true for structures
-like `ramfs_file_operations` and `ramfs_file_inode_operations`.
